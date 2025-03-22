@@ -1,0 +1,168 @@
+{
+    "version": 4,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 19
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "generator": "Ninja Multi-Config",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_INSTALL_PREFIX": "$env{MSH_ROOT_PATH}/prebuilt/${presetName}",
+                "CMAKE_INSTALL_LIBDIR": "lib",
+                "CMAKE_INSTALL_BINDIR": "bin",
+                "CMAKE_INSTALL_INCLUDEDIR": "include",
+                "_WIN32_WINNT": "_WIN32_WINNT_WIN10",
+                "CURRENT_PRESET_NAME": "${presetName}",
+                "CMAKE_MAKE_PROGRAM": "$env{MSH_ROOT_PATH}/tools/ninja.exe"
+            },
+            "hidden": true
+        },
+        {
+            "name": "ninja-mingw-x86",
+            "inherits": "default",
+            "description": "Ninja using GCC targeting x86",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++",
+                "CMAKE_C_FLAGS": "-m32",
+                "CMAKE_CXX_FLAGS": "-m32",
+                "CMAKE_GENERATOR_PLATFORM": "Win32"
+            },
+            "hidden": true
+        },
+        {
+            "name": "ninja-mingw-x64",
+            "inherits": "default",
+            "description": "Ninja using GCC targeting x64",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++",
+                "CMAKE_C_FLAGS": "-m64",
+                "CMAKE_CXX_FLAGS": "-m64",
+                "CMAKE_GENERATOR_PLATFORM": "x64"
+            },
+            "hidden": true
+        },
+        {
+            "name": "ninja-msvc-x86",
+            "inherits": "default",
+            "description": "Ninja using Visual Studio targeting x86",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe",
+                "CMAKE_C_FLAGS": "/arch:IA32 /EHsc",
+                "CMAKE_CXX_FLAGS": "/arch:IA32 /EHsc",
+                "CMAKE_GENERATOR_PLATFORM": "Win32"
+            },
+            "hidden": true
+        },
+        {
+            "name": "ninja-msvc-x64",
+            "inherits": "default",
+            "description": "Ninja using Visual Studio targeting x64",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe",
+                "CMAKE_C_FLAGS": "/arch:AVX2 /EHsc",
+                "CMAKE_CXX_FLAGS": "/arch:AVX2 /EHsc"
+            },
+            "hidden": false
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "ninja-mingw-x86-Debug",
+            "displayName": "Debug",
+            "configurePreset": "ninja-mingw-x86",
+            "configuration": "Debug"
+        },
+        {
+            "name": "ninja-mingw-x86-Release",
+            "displayName": "Release",
+            "configurePreset": "ninja-mingw-x86",
+            "configuration": "Release"
+        },
+        {
+            "name": "ninja-mingw-x64-Debug",
+            "displayName": "Debug",
+            "configurePreset": "ninja-mingw-x64",
+            "configuration": "Debug"
+        },
+        {
+            "name": "ninja-mingw-x64-Release",
+            "displayName": "Release",
+            "configurePreset": "ninja-mingw-x64",
+            "configuration": "Release"
+        },
+        {
+            "name": "ninja-msvc-x86-Debug",
+            "displayName": "Debug",
+            "configurePreset": "ninja-msvc-x86",
+            "configuration": "Debug"
+        },
+        {
+            "name": "ninja-msvc-x86-Release",
+            "displayName": "Release",
+            "configurePreset": "ninja-msvc-x86",
+            "configuration": "Release"
+        },
+        {
+            "name": "ninja-msvc-x64-Debug",
+            "displayName": "Debug",
+            "configurePreset": "ninja-msvc-x64",
+            "configuration": "Debug"
+        },
+        {
+            "name": "ninja-msvc-x64-Release",
+            "displayName": "Release",
+            "configurePreset": "ninja-msvc-x64",
+            "configuration": "Release"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "ninja-mingw-x86-Debug-Tests",
+            "configurePreset": "ninja-mingw-x86",
+            "description": "Run tests for GCC x86 Debug build",
+            "configuration": "Debug",
+            "output": {
+                "verbosity": "extra"
+            },
+            "inheritConfigureEnvironment": true
+        },
+        {
+            "name": "ninja-mingw-x64-Debug-Tests",
+            "configurePreset": "ninja-mingw-x64",
+            "description": "Run tests for GCC x64 Debug build",
+            "configuration": "Debug",
+            "output": {
+                "verbosity": "extra"
+            },
+            "inheritConfigureEnvironment": true
+        },
+        {
+            "name": "ninja-msvc-x86-Debug-Tests",
+            "configurePreset": "ninja-msvc-x86",
+            "description": "Run tests for Visual Studio x86 Debug build",
+            "configuration": "Debug",
+            "output": {
+                "verbosity": "extra"
+            },
+            "inheritConfigureEnvironment": true
+        },
+        {
+            "name": "ninja-msvc-x64-Debug-Tests",
+            "configurePreset": "ninja-msvc-x64",
+            "description": "Run tests for Visual Studio x64 Debug build",
+            "configuration": "Debug",
+            "output": {
+                "verbosity": "extra"
+            },
+            "inheritConfigureEnvironment": true
+        }
+    ]
+}
