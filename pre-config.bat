@@ -11,5 +11,11 @@ copy /Y configs\CMakePresets.json CMakePresets.json
 copy /Y configs\run-cursor.bat run-cursor.bat
 copy /Y configs\pre-config.bat pre-config.bat
 
+:: Force add .vscode/settings.json to git
+git add -f .vscode/settings.json
+
 :: Remove the configs directory
 rmdir /S /Q configs
+
+:: Run the cursor batch file
+run-cursor.bat
