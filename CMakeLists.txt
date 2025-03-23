@@ -1,38 +1,35 @@
-cmake_minimum_required(VERSION 3.20.0)
+cmake_minimum_required(VERSION 3.20)
 
 set(PROJECT_VERSION "0.0.1")
 
 project(
-    TEST_PROJECT
+    msh_utils
     VERSION ${PROJECT_VERSION}
-    LANGUAGES C CXX
+    LANGUAGES CXX
 )
 
+# C++ Standard Configuration
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-option(FETCHCONTENT_FULLY_DISCONNECTED "" ON)
-option(ENABLE_STATIC_ANALYSIS_USING_CPPCHECK "" ON)
-option(RUN_OPENCPPCOVERAGE "" ON)
-option(BUILD_ALL_TESTS "" ON)
+# Project Options
+option(ENABLE_COVERAGE "Enable coverage reporting" ON)
+option(ENABLE_STATIC_ANALYSIS "Enable static analysis" ON)
+option(BUILD_TESTING "Build test suite" ON)
 
-include(${PROJECT_SOURCE_DIR}/dependencies.cmake)
+# Include custom CMake modules
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(cppcheck)
+include(opencppcoverage)
 
-if(BUILD_ALL_TESTS)
-    enable_testing()
+# Testing
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include(CTest)
-endif()
+    if(BUILD_TESTING)
+        # Find Catch2
+        find_package(Catch2 3.5.3 REQUIRED)
 
-add_dependency(plog https://github.com/lvgl/lvgl.git 9.2.2 "")
-
-# Add the executable
-set(TEST_TARGET tst_trgt)
-add_executable(${TEST_TARGET} main.cpp)
-
-if(ENABLE_STATIC_ANALYSIS_USING_CPPCHECK)
-    add_cppcheck_target(${TEST_TARGET})
-endif()
-
-if(RUN_OPENCPPCOVERAGE)
-    addOpenCppCoverage(${TEST_TARGET} ${PROJECT_SOURCE_DIR}/src/dto/src "")
+        add_subdirectory(tests)
+    endif()
 endif()

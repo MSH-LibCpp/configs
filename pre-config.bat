@@ -10,6 +10,8 @@ copy /Y configs\.gitignore .gitignore
 copy /Y configs\CMakePresets.json CMakePresets.json
 copy /Y configs\run-cursor.bat run-cursor.bat
 copy /Y configs\pre-config.bat pre-config.bat
+copy /Y configs\README.md README.md
+copy /Y configs\CMakeLists.txt CMakeLists.txt
 
 :: Force add .vscode/settings.json to git
 git add -f .vscode/settings.json
