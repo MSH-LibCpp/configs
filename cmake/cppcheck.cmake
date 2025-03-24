@@ -26,7 +26,8 @@ function(configure_cppcheck TARGET)
             add_custom_target(${TARGET}_cppcheck
                 COMMAND ${CPPCHECK_EXECUTABLE}
                 --enable=all
-                # --std=c++17
+                --language=c++
+                --std=c++17
                 --inconclusive
                 --suppress=missingIncludeSystem
                 --suppress=missingInclude
