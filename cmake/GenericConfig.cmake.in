@@ -1,0 +1,25 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/${CMAKE_FIND_PACKAGE_NAME}Targets.cmake")
+
+include(CMakeFindDependencyMacro)
+foreach(dep @PACKAGE_DEPENDENCIES@)
+    find_dependency(${dep} REQUIRED)
+endforeach()
+
+# Optional version sanity check
+if(${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION)
+    if(${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION_MAJOR EQUAL @PROJECT_VERSION_MAJOR@)
+        if(${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION VERSION_GREATER @PROJECT_VERSION@)
+            message(FATAL_ERROR
+                ">>>>> Requested ${CMAKE_FIND_PACKAGE_NAME} version ${${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION} "
+                "is newer than installed version @PROJECT_VERSION@"
+            )
+        endif()
+    else()
+        message(FATAL_ERROR
+            ">>>>> Major version mismatch: Requested ${${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION_MAJOR}, "
+            "but installed is @PROJECT_VERSION_MAJOR@"
+        )
+    endif()
+endif()

@@ -1,53 +1,97 @@
-# configure_opencppcoverage(TEST_TARGET [SOURCES_DIRS])
-# Note that SOURCES_DIRS should be absolute paths not relative paths
-function(configure_opencppcoverage TEST_TARGET)
-    if(WIN32)
-        find_program(OPENCPPCOVERAGE OpenCppCoverage HINTS "C:\\Program Files\\OpenCppCoverage" "$ENV{MSH_ROOT_PATH}/tools/coverage")
+# ===========================
+# configure_opencppcoverage
+# ===========================
+# Configures a custom post-build command to run OpenCppCoverage for a given target.
+#
+# Usage:
+#   configure_opencppcoverage(
+#       TARGET   <target_name>                                         # Required
+#       SOURCES  <absolute source directories to include in coverage>  # Optional : Uses the target's sources
+#   )
+#
+# Notes:
+# - Only activates on Windows in Debug builds.
+# - All paths in SOURCES must be absolute.
+# - Accepts only directories, not individual source files.
+function(configure_opencppcoverage)
+    # Parses the arguments
+    set(options)
+    set(oneValueArgs TARGET)
+    set(multiValueArgs SOURCES)
+    cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-        if(OPENCPPCOVERAGE)
-            message(STATUS ">>> Found OpenCppCoverage program: ${OPENCPPCOVERAGE}")
+    if(NOT ARG_TARGET)
+        message(FATAL_ERROR ">>>>> configure_opencppcoverage: TARGET argument is required.")
+    endif()
 
-            # Normalize paths for Windows
-            set(ModulePathString ${CMAKE_CURRENT_BINARY_DIR}/Debug)
-            string(REGEX REPLACE "/" "\\\\" ModulePathString ${ModulePathString})
-            message(STATUS ">>> Module path string: ${ModulePathString}")
+    # Only runs on Windows in Debug builds
+    if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+        # Tries to locate OpenCppCoverage executable
+        find_program(OPENCPPCOVERAGE OpenCppCoverage
+            HINTS
+            "C:\\Program Files\\OpenCppCoverage"
+            "$ENV{MSH_ROOT_PATH}/tools/coverage"
+        )
 
-            # Get source directories from the arguments
-            set(SOURCES_ARGS "")
-            foreach(arg IN LISTS ARGN)
-                string(REGEX REPLACE "/" "\\\\" SOURCE_DIR ${arg})
-                list(APPEND SOURCES_ARGS "${SOURCE_DIR}")
-            endforeach()
-
-            # Remove duplicates from source directories
-            list(REMOVE_DUPLICATES SOURCES_ARGS)
-
-            # Build the sources arguments
-            set(SOURCES_CMD "")
-            foreach(SOURCE_DIR ${SOURCES_ARGS})
-                list(APPEND SOURCES_CMD "--sources")
-                list(APPEND SOURCES_CMD "${SOURCE_DIR}")
-            endforeach()
-
-            # Add coverage command to test target
-            add_custom_command(
-                TARGET ${TEST_TARGET} POST_BUILD
-                COMMAND ${OPENCPPCOVERAGE}
-                --modules ${ModulePathString}
-                ${ModulePathString}\\$<TARGET_FILE_NAME:${TEST_TARGET}>
-                --export_type=html:${CMAKE_BINARY_DIR}/${TEST_TARGET}_coverage_report
-                ${SOURCES_CMD}
-                COMMENT "Generating coverage report..."
-                VERBATIM
-            )
-
-            message(STATUS ">>> Coverage report will be generated in: ${CMAKE_BINARY_DIR}/${TEST_TARGET}_coverage_report")
-            message(STATUS ">>> Source directories being monitored:")
-            foreach(SOURCE_DIR ${SOURCES_ARGS})
-                message(STATUS "    - ${SOURCE_DIR}")
-            endforeach()
-        else()
-            message(WARNING ">>>> OpenCppCoverage program not found")
+        if(NOT OPENCPPCOVERAGE)
+            message(WARNING ">>>> OpenCppCoverage not found — coverage will not be enabled.")
+            return()
         endif()
+
+        message(STATUS ">>> Found OpenCppCoverage: ${OPENCPPCOVERAGE}")
+
+        # Normalizes the binary directory path (CMake uses forward slashes by default)
+        set(ModulePathString "${CMAKE_CURRENT_BINARY_DIR}")
+        string(REPLACE "/" "\\" ModulePathString "${ModulePathString}")
+
+        message(STATUS ">>> Coverage output directory: ${CMAKE_BINARY_DIR}/${ARG_TARGET}_coverage_report")
+
+        # Validates and normalize source directories
+        set(SOURCES_ARGS "")
+        foreach(dir IN LISTS ARG_SOURCES)
+            if(NOT IS_ABSOLUTE "${dir}")
+                message(FATAL_ERROR ">>>>> Source path '${dir}' must be an absolute path.")
+            endif()
+
+            if(NOT IS_DIRECTORY "${dir}")
+                message(WARNING ">>>> Skipping: '${dir}' is not a valid directory.")
+                continue()
+            endif()
+
+            # Normalizes slashes for Windows
+            string(REPLACE "/" "\\" norm_path "${dir}")
+            list(APPEND SOURCES_ARGS "${norm_path}")
+        endforeach()
+
+        list(REMOVE_DUPLICATES SOURCES_ARGS)
+
+        if(SOURCES_ARGS STREQUAL "")
+            message(WARNING ">>>> No valid source directories provided for coverage.")
+            return()
+        endif()
+
+        # Constructs --sources <dir> arguments for OpenCppCoverage
+        set(SOURCES_CMD "")
+        foreach(src_dir IN LISTS SOURCES_ARGS)
+            list(APPEND SOURCES_CMD "--sources" "${src_dir}")
+        endforeach()
+
+        # Registers a POST_BUILD step to run OpenCppCoverage
+        add_custom_command(
+            TARGET ${ARG_TARGET} POST_BUILD
+            COMMAND ${OPENCPPCOVERAGE}
+            --modules "${ModulePathString}"
+            "${ModulePathString}\\$<TARGET_FILE_NAME:${ARG_TARGET}>"
+            --export_type=html:${CMAKE_BINARY_DIR}/${ARG_TARGET}_coverage_report
+            ${SOURCES_CMD}
+            COMMENT "Generating OpenCppCoverage report for '${ARG_TARGET}'..."
+            VERBATIM
+        )
+
+        # Prints out for user clarity
+        message(STATUS ">>> OpenCppCoverage will monitor:")
+        foreach(src_dir IN LISTS SOURCES_ARGS)
+            message(STATUS "    - ${src_dir}")
+        endforeach()
     endif()
 endfunction()

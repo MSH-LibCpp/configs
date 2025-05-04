@@ -1,0 +1,34 @@
+@echo off
+setlocal
+
+:: -----------------------------------------
+:: Resolve path to the current script (test wrapper)
+:: -----------------------------------------
+set "exe_dir=%~dp0"
+set "exe_dir=%exe_dir:~0,-1%"  :: Remove trailing backslash (if any)
+
+:: -----------------------------------------
+:: Compute the directory containing runtime DLLs (../../bin)
+:: -----------------------------------------
+pushd "%exe_dir%"
+cd ..\..\bin
+set "dll_dir=%cd%"
+popd
+
+:: -----------------------------------------
+:: Prepend DLL path to PATH (temporary for this session)
+:: -----------------------------------------
+set "PATH=%dll_dir%;%PATH%"
+
+:: -----------------------------------------
+:: Launch the executable from its own directory
+:: Ensures relative resource paths work correctly
+:: -----------------------------------------
+pushd "%exe_dir%"
+@TEST_TARGET@.exe
+popd
+
+:: -----------------------------------------
+:: Keep the console window open (for debugging, test output)
+:: -----------------------------------------
+pause

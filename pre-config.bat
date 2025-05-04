@@ -8,8 +8,8 @@ xcopy /E /I /Y configs\cmake cmake
 copy /Y configs\AskAI.md AskAI.md
 copy /Y configs\.clang-format .clang-format
 copy /Y configs\CMakePresets.json CMakePresets.json
-copy /Y configs\install-config.bat install-config.bat
-copy /Y configs\run-cursor.bat run-cursor.bat
+copy /Y configs\update-config.bat update-config.bat
+copy /Y configs\run-vscode.bat run-vscode.bat
 copy /Y configs\.gitignore .gitignore
 copy /Y configs\CMakeLists.txt CMakeLists.txt
 copy /Y configs\README.md README.md
@@ -20,8 +20,8 @@ git add -f .vscode/settings.json
 :: Remove the configs directory
 rmdir /S /Q configs
 
-:: Run the cursor batch file
-start "" cmd /c "run-cursor.bat"
+:: Run the vscode batch file
+start "" cmd /c "run-vscode.bat"
 
 :: Delete this script itself
 del "%~f0"
