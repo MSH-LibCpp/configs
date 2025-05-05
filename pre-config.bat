@@ -9,6 +9,7 @@ copy /Y configs\AskAI.md AskAI.md
 copy /Y configs\.clang-format .clang-format
 copy /Y configs\CMakePresets.json CMakePresets.json
 copy /Y configs\update-config.bat update-config.bat
+copy /Y configs\install-packages.bat install-packages.bat
 copy /Y configs\run-vscode.bat run-vscode.bat
 copy /Y configs\.gitignore .gitignore
 copy /Y configs\CMakeLists.txt CMakeLists.txt

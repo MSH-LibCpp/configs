@@ -8,7 +8,8 @@ xcopy /E /I /Y configs\cmake cmake
 copy /Y configs\AskAI.md AskAI.md
 copy /Y configs\.clang-format .clang-format
 copy /Y configs\CMakePresets.json CMakePresets.json
-copy /Y configs\install-config.bat install-config.bat
+copy /Y configs\update-config.bat update-config.bat
+copy /Y configs\install-packages.bat install-packages.bat
 copy /Y configs\run-vscode.bat run-vscode.bat
 
 :: Remove the configs directory
