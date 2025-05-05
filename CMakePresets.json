@@ -189,41 +189,79 @@
     "testPresets": [
         {
             "name": "msvc-x86-win10-release",
-            "configurePreset": "msvc-x86-win10-release"
+            "displayName": "MSVC x86 Release",
+            "description": "Run tests for MSVC x86 Release build",
+            "configurePreset": "msvc-x86-win10-release",
+            "configuration": "Release",
+            "output": {
+                "verbosity": "default"
+            }
         },
         {
             "name": "msvc-x86-win10-debug",
-            "displayName": "default test",
-            "description": "default test",
+            "displayName": "MSVC x86 Debug",
+            "description": "Run tests for MSVC x86 Debug build",
             "configurePreset": "msvc-x86-win10-debug",
             "configuration": "Debug",
             "output": {
-                "verbosity": "extra"
+                "verbosity": "verbose"
             }
         },
         {
             "name": "msvc-x64-win10-release",
-            "configurePreset": "msvc-x64-win10-release"
+            "displayName": "MSVC x64 Release",
+            "description": "Run tests for MSVC x64 Release build",
+            "configurePreset": "msvc-x64-win10-release",
+            "configuration": "Release",
+            "output": {
+                "verbosity": "default"
+            }
         },
         {
             "name": "msvc-x64-win10-debug",
-            "configurePreset": "msvc-x64-win10-debug"
+            "displayName": "MSVC x64 Debug",
+            "description": "Run tests for MSVC x64 Debug build",
+            "configurePreset": "msvc-x64-win10-debug",
+            "configuration": "Debug",
+            "output": {
+                "verbosity": "verbose"
+            }
         },
         {
             "name": "gxx-x86-release",
-            "configurePreset": "gxx-x86-release"
+            "displayName": "GCC x86 Release",
+            "description": "Run tests for GCC x86 Release build",
+            "configurePreset": "gxx-x86-release",
+            "output": {
+                "verbosity": "default"
+            }
         },
         {
             "name": "gxx-x86-debug",
-            "configurePreset": "gxx-x86-debug"
+            "displayName": "GCC x86 Debug",
+            "description": "Run tests for GCC x86 Debug build",
+            "configurePreset": "gxx-x86-debug",
+            "output": {
+                "verbosity": "verbose"
+            }
         },
         {
             "name": "gxx-x64-release",
-            "configurePreset": "gxx-x64-release"
+            "displayName": "GCC x64 Release",
+            "description": "Run tests for GCC x64 Release build",
+            "configurePreset": "gxx-x64-release",
+            "output": {
+                "verbosity": "default"
+            }
         },
         {
             "name": "gxx-x64-debug",
-            "configurePreset": "gxx-x64-debug"
+            "displayName": "GCC x64 Debug",
+            "description": "Run tests for GCC x64 Debug build",
+            "configurePreset": "gxx-x64-debug",
+            "output": {
+                "verbosity": "verbose"
+            }
         }
     ]
 }

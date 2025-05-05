@@ -1,5 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
+call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
 
 :: Optional: set MSH_ROOT_PATH if not already defined
 if not defined MSH_ROOT_PATH (
@@ -57,8 +58,19 @@ for %%P in (%presets%) do (
         exit /b 1
     )
 
+    echo [%%P] Cleaning up build directory: !buildDir!
+    rmdir /s /q "!buildDir!"
+    if exist "!buildDir!" (
+        echo [%%P] Failed to remove directory.
+    ) else (
+        echo [%%P] Build directory removed.
+    )
+
     echo [%%P] Done!
 )
+
+git reset --hard
+git clean -fd
 
 echo.
 echo All builds and installs completed.
