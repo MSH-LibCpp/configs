@@ -22,7 +22,7 @@ git add -f .vscode/settings.json
 rmdir /S /Q configs
 
 :: Run the vscode batch file
-start "" cmd /c "run-vscode.bat"
+@REM start "" cmd /c "run-vscode.bat"
 
 :: Delete this script itself
 del "%~f0"

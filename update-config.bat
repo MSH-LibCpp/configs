@@ -16,4 +16,4 @@ copy /Y configs\run-vscode.bat run-vscode.bat
 rmdir /S /Q configs
 
 :: Run the vscode batch file
-run-vscode.bat
+@REM run-vscode.bat
