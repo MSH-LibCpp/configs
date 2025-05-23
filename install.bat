@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 :: Change working directory to script's location
 cd /d "%~dp0"
-set "LOGFILE=%~dp0install-packages.log"
+set "LOGFILE=%~dp0install.log"
 echo Log file: %LOGFILE%
 
 call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
