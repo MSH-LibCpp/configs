@@ -57,7 +57,7 @@ function(install_library_requirements)
 
     # Configures the generic config template
     configure_file(
-        ${PROJECT_SOURCE_DIR}/cmake/GenericConfig.cmake.in
+        $ENV{MSH_ROOT_PATH}/configs/cmake/GenericConfig.cmake.in
         ${CMAKE_CURRENT_BINARY_DIR}/${ARG_TARGET}Config.cmake
         @ONLY
     )

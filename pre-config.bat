@@ -2,7 +2,6 @@ git clone https://github.com/MSH-LibCpp/configs.git
 
 :: Move directories
 xcopy /E /I /Y configs\.vscode .vscode
-xcopy /E /I /Y configs\cmake cmake
 
 :: Move files
 copy /Y configs\AskAI.md AskAI.md
@@ -20,9 +19,6 @@ git add -f .vscode/settings.json
 
 :: Remove the configs directory
 rmdir /S /Q configs
-
-:: Run the vscode batch file
-@REM start "" cmd /c "run-vscode.bat"
 
 :: Delete this script itself
 del "%~f0"
