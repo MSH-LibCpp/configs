@@ -48,7 +48,8 @@ function(install_library_requirements)
     # Exports the target for usage by find_package()
     install(EXPORT ${ARG_TARGET}Targets
         FILE ${ARG_TARGET}Targets.cmake
-        NAMESPACE ${ARG_TARGET}:: # Enables: target_link_libraries(myapp PRIVATE ${ARG_TARGET}::Lib)
+        NAMESPACE msh:: # Enables: target_link_libraries(myapp PRIVATE msh::Lib)
+        # NAMESPACE ${ARG_TARGET}:: # Enables: target_link_libraries(myapp PRIVATE ${ARG_TARGET}::Lib)
         DESTINATION ${CONFIG_INSTALL_DIR}
     )
 
